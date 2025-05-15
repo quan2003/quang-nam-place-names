@@ -4,7 +4,7 @@ const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-require("dotenv").config(); // Nạp file .env cho môi trường cục bộ
+require("dotenv").config();
 
 const app = express();
 app.use(cors());
