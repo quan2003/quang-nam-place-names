@@ -490,17 +490,17 @@ const startServer = async () => {
 };
 
 // API để upload hình ảnh
-app.post("/api/upload-image", upload.single("image"), (req, res) => {
+app.post("/api/upload-image", upload.single("image"), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: "Không có file được upload" });
     }
-    const base64Image = req.file.buffer.toString("base64");
-    const mimeType = req.file.mimetype;
-    const imageDataUrl = `data:${mimeType};base64,${base64Image}`;
+    const imageDataUrl = `data:image/png;base64,${req.file.buffer.toString(
+      "base64"
+    )}`;
     res.json({ imageDataUrl });
   } catch (err) {
-    console.error(err.stack);
+    console.error("Lỗi khi upload hình ảnh:", err.stack);
     res.status(500).json({ error: "Lỗi khi upload hình ảnh" });
   }
 });

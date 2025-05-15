@@ -205,6 +205,7 @@ function App() {
     const formData = new FormData();
     formData.append("image", file);
     try {
+      console.log("Gửi yêu cầu upload ảnh đến:", `${API_URL}/api/upload-image`);
       const response = await axios.post(
         `${API_URL}/api/upload-image`,
         formData,
@@ -214,10 +215,27 @@ function App() {
           },
         }
       );
-      return response.data.imagePath;
+      console.log("Kết quả upload ảnh:", response.data);
+      return response.data.imageDataUrl;
     } catch (err) {
-      setError("Lỗi khi upload hình ảnh: " + err.message);
-      showNotification("Lỗi khi upload hình ảnh: " + err.message, "error");
+      console.error("Lỗi khi upload hình ảnh:", err);
+      if (err.response) {
+        console.error("Chi tiết lỗi từ server:", err.response.data);
+        setError(
+          `Lỗi khi upload hình ảnh: ${err.response.status} - ${
+            err.response.data.error || err.message
+          }`
+        );
+        showNotification(
+          `Lỗi khi upload hình ảnh: ${err.response.status} - ${
+            err.response.data.error || err.message
+          }`,
+          "error"
+        );
+      } else {
+        setError("Lỗi khi upload hình ảnh: " + err.message);
+        showNotification("Lỗi khi upload hình ảnh: " + err.message, "error");
+      }
       return null;
     }
   };
