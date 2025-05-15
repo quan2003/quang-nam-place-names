@@ -28,6 +28,45 @@ const pool = new Pool({
     ? false
     : { rejectUnauthorized: false },
 });
+
+// Hàm khởi tạo bảng
+const initializeDatabase = async () => {
+  try {
+    // Tạo bảng place_headers nếu chưa tồn tại
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS place_headers (
+        id SERIAL PRIMARY KEY,
+        huyen VARCHAR(255) NOT NULL,
+        tong VARCHAR(255) NOT NULL,
+        level VARCHAR(50) NOT NULL,
+        name VARCHAR(255) NOT NULL,
+        chu_han_nom TEXT
+      )
+    `);
+
+    // Tạo bảng place_names nếu chưa tồn tại
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS place_names (
+        id SERIAL PRIMARY KEY,
+        huyen VARCHAR(255) NOT NULL,
+        tong VARCHAR(255) NOT NULL,
+        so_thu_tu INTEGER NOT NULL,
+        dia_danh_chung VARCHAR(255),
+        ten_rieng VARCHAR(255),
+        chu_han_nom TEXT,
+        nguon TEXT,
+        mo_ta TEXT,
+        nhan_xet TEXT,
+        ghi_chu TEXT,
+        ten_khac TEXT
+      )
+    `);
+    console.log("Đã kiểm tra và tạo bảng thành công");
+  } catch (err) {
+    console.error("Lỗi khi tạo bảng:", err.stack);
+    process.exit(1); // Thoát nếu lỗi
+  }
+};
 // Thêm dữ liệu mặc định khi khởi động server
 const initializeDefaultData = async () => {
   try {
@@ -409,7 +448,6 @@ const initializeDefaultData = async () => {
           "data:image/png;base64,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",
       },
     ];
-
     // Kiểm tra và chèn từng tiêu đề mặc định
     for (const header of defaultHeaders) {
       const checkQuery =
@@ -440,8 +478,14 @@ const initializeDefaultData = async () => {
   }
 };
 
-// Gọi hàm thêm dữ liệu mặc định khi server khởi động
-initializeDefaultData();
+// Gọi hàm khởi tạo database trước khi khởi tạo dữ liệu mặc định
+const startServer = async () => {
+  await initializeDatabase(); // Tạo bảng trước
+  await initializeDefaultData(); // Chèn dữ liệu mặc định
+};
+
+// Khởi động server
+startServer();
 
 // API để upload hình ảnh
 app.post("/api/upload-image", upload.single("image"), (req, res) => {
