@@ -128,18 +128,24 @@ function App() {
     fetchHeaders();
   }, [selectedHuyen]);
 
+  // Trong hàm App
   useEffect(() => {
     const fetchData = async () => {
       if (!selectedHuyen) return;
       setLoading(true);
       setError(null);
       try {
+        const params = {
+          huyen: selectedHuyen,
+          page: currentPage,
+          limit: itemsPerPage,
+        };
+        // Thêm tong vào params nếu selectedTong không phải "All"
+        if (selectedTong !== "All") {
+          params.tong = selectedTong;
+        }
         const response = await axios.get(`${API_URL}/api/place-names`, {
-          params: {
-            huyen: selectedHuyen,
-            page: currentPage,
-            limit: itemsPerPage,
-          },
+          params,
         });
         console.log("Dữ liệu place_names:", response.data);
         const mappedData = response.data.data.map((row) => ({
@@ -168,14 +174,12 @@ function App() {
       }
     };
     fetchData();
-  }, [selectedHuyen, currentPage, itemsPerPage]);
+  }, [selectedHuyen, selectedTong, currentPage, itemsPerPage]);
 
+  // Cập nhật useEffect dùng để lọc, chỉ xử lý searchQuery
   useEffect(() => {
     let result = data;
     console.log("Dữ liệu data trước khi lọc:", data);
-    if (selectedTong !== "All") {
-      result = result.filter((row) => row["Tổng"] === selectedTong);
-    }
     if (searchQuery) {
       result = result.filter(
         (row) =>
@@ -185,7 +189,7 @@ function App() {
     }
     console.log("Dữ liệu filteredData sau khi lọc:", result);
     setFilteredData(result);
-  }, [selectedTong, searchQuery, data]);
+  }, [searchQuery, data]);
 
   const requestSort = (key) => {
     setSortConfig((prev) => ({
