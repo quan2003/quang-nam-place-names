@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Bỏ qua tất cả các file .env trong dự án
+.env
+
+# Bỏ qua file .env trong thư mục backend
+backend/.env
