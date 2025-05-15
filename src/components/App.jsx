@@ -3,7 +3,9 @@ import axios from "axios";
 import { motion } from "framer-motion";
 
 // Sử dụng biến môi trường VITE_API_URL
-const API_URL = process.env.VITE_API_URL || "http://localhost:8080";
+const API_URL =
+  process.env.VITE_API_URL ||
+  "https://quang-nam-place-names-production.up.railway.app";
 console.log("API_URL được sử dụng:", API_URL); // Log giá trị API_URL
 
 function App() {
