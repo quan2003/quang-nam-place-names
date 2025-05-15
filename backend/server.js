@@ -4,6 +4,7 @@ const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+require("dotenv").config();
 
 const app = express();
 app.use(cors());
@@ -11,14 +12,16 @@ app.use(express.json());
 
 const upload = multer({ storage: multer.memoryStorage() });
 
+console.log("DATABASE_URL:", process.env.DATABASE_URL);
+
 // Cấu hình PostgreSQL
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL.includes("localhost")
-    ? false
-    : { rejectUnauthorized: false },
+  ssl:
+    process.env.DATABASE_URL && process.env.DATABASE_URL.includes("localhost")
+      ? false
+      : { rejectUnauthorized: false },
 });
-
 // Thêm dữ liệu mặc định khi khởi động server
 const initializeDefaultData = async () => {
   try {
