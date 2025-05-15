@@ -10,6 +10,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Phục vụ file tĩnh từ thư mục dist (frontend)
+app.use(express.static(path.join(__dirname, "dist")));
+
 const upload = multer({ storage: multer.memoryStorage() });
 
 // Log DATABASE_URL để debug
@@ -484,9 +487,6 @@ const startServer = async () => {
   await initializeDefaultData(); // Chèn dữ liệu mặc định
 };
 
-// Khởi động server
-startServer();
-
 // API để upload hình ảnh
 app.post("/api/upload-image", upload.single("image"), (req, res) => {
   try {
@@ -697,7 +697,12 @@ app.delete("/api/place-names/:id", async (req, res) => {
     res.status(500).json({ error: "Lỗi khi xóa dữ liệu" });
   }
 });
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server chạy tại http://localhost:${PORT}`);
+  startServer();
 });
