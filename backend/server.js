@@ -12,15 +12,21 @@ app.use(express.json());
 
 const upload = multer({ storage: multer.memoryStorage() });
 
+// Log DATABASE_URL để debug
 console.log("DATABASE_URL:", process.env.DATABASE_URL);
+
+// Kiểm tra nếu DATABASE_URL không tồn tại
+if (!process.env.DATABASE_URL) {
+  console.error("Lỗi: DATABASE_URL chưa được định nghĩa trong biến môi trường");
+  process.exit(1); // Thoát ứng dụng nếu thiếu DATABASE_URL
+}
 
 // Cấu hình PostgreSQL
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl:
-    process.env.DATABASE_URL && process.env.DATABASE_URL.includes("localhost")
-      ? false
-      : { rejectUnauthorized: false },
+  ssl: process.env.DATABASE_URL.includes("localhost")
+    ? false
+    : { rejectUnauthorized: false },
 });
 // Thêm dữ liệu mặc định khi khởi động server
 const initializeDefaultData = async () => {
