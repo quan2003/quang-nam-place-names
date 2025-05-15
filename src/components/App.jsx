@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 
 // Sử dụng biến môi trường REACT_APP_API_URL
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+console.log("API_URL được sử dụng:", API_URL); // Log giá trị API_URL
 
 function App() {
   const [headers, setHeaders] = useState([]);
@@ -78,6 +79,7 @@ function App() {
   useEffect(() => {
     const fetchHuyenList = async () => {
       try {
+        console.log("Gọi API huyen-list:", `${API_URL}/api/huyen-list`);
         const response = await axios.get(`${API_URL}/api/huyen-list`);
         console.log("Danh sách huyện:", response.data);
         setHuyenList(response.data);
@@ -85,7 +87,14 @@ function App() {
           setSelectedHuyen(response.data[0]);
         }
       } catch (err) {
-        setError("Lỗi khi lấy danh sách huyện: " + err.message);
+        console.error("Lỗi khi gọi API huyen-list:", err);
+        setError(
+          `Lỗi khi lấy danh sách huyện: ${err.message}${
+            err.response
+              ? ` - ${err.response.status} ${err.response.statusText}`
+              : ""
+          }`
+        );
       }
     };
     fetchHuyenList();
@@ -94,6 +103,7 @@ function App() {
   useEffect(() => {
     const fetchHeaders = async () => {
       try {
+        console.log("Gọi API place-headers:", `${API_URL}/api/place-headers`);
         const response = await axios.get(`${API_URL}/api/place-headers`);
         console.log("Danh sách headers:", response.data);
         setHeaders(response.data);
@@ -103,7 +113,14 @@ function App() {
           setSelectedPhu("PHỦ ĐIỆN BÀN");
         }
       } catch (err) {
-        setError("Lỗi khi lấy tiêu đề: " + err.message);
+        console.error("Lỗi khi gọi API place-headers:", err);
+        setError(
+          `Lỗi khi lấy tiêu đề: ${err.message}${
+            err.response
+              ? ` - ${err.response.status} ${err.response.statusText}`
+              : ""
+          }`
+        );
       }
     };
     fetchHeaders();
