@@ -547,7 +547,7 @@ app.post("/api/place-headers", async (req, res) => {
 
 // API để lấy dữ liệu chi tiết (place_names) với phân trang và lọc theo huyện
 app.get("/api/place-names", async (req, res) => {
-  const { huyen, page = 1, limit = 10 } = req.query;
+  const { huyen, tong, page = 1, limit = 10 } = req.query;
   const offset = (page - 1) * limit;
 
   try {
@@ -556,11 +556,29 @@ app.get("/api/place-names", async (req, res) => {
     let values = [];
     let countValues = [];
 
-    if (huyen) {
-      query += " WHERE huyen = $1";
-      countQuery += " WHERE huyen = $1";
-      values.push(huyen);
-      countValues.push(huyen);
+    if (huyen || tong) {
+      query += " WHERE";
+      countQuery += " WHERE";
+      let conditions = [];
+      let countConditions = [];
+
+      if (huyen) {
+        conditions.push("huyen = $1");
+        countConditions.push("huyen = $1");
+        values.push(huyen);
+        countValues.push(huyen);
+      }
+
+      if (tong && tong !== "All") {
+        const tongIndex = huyen ? 2 : 1;
+        conditions.push(`tong = $${tongIndex}`);
+        countConditions.push(`tong = $${tongIndex}`);
+        values.push(tong);
+        countValues.push(tong);
+      }
+
+      query += " " + conditions.join(" AND ");
+      countQuery += " " + countConditions.join(" AND ");
     }
 
     query +=

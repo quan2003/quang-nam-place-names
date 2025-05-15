@@ -128,7 +128,6 @@ function App() {
     fetchHeaders();
   }, [selectedHuyen]);
 
-  // Trong hàm App
   useEffect(() => {
     const fetchData = async () => {
       if (!selectedHuyen) return;
@@ -140,7 +139,6 @@ function App() {
           page: currentPage,
           limit: itemsPerPage,
         };
-        // Thêm tong vào params nếu selectedTong không phải "All"
         if (selectedTong !== "All") {
           params.tong = selectedTong;
         }
@@ -176,7 +174,6 @@ function App() {
     fetchData();
   }, [selectedHuyen, selectedTong, currentPage, itemsPerPage]);
 
-  // Cập nhật useEffect dùng để lọc, chỉ xử lý searchQuery
   useEffect(() => {
     let result = data;
     console.log("Dữ liệu data trước khi lọc:", data);
