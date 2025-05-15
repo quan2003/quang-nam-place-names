@@ -3,7 +3,7 @@ import axios from "axios";
 import { motion } from "framer-motion";
 
 // Sử dụng biến môi trường VITE_API_URL
-const API_URL = process.env.VITE_API_URL || "http://localhost:5000";
+const API_URL = process.env.VITE_API_URL;
 console.log("API_URL được sử dụng:", API_URL); // Log giá trị API_URL
 
 function App() {

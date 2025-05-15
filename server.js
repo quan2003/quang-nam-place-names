@@ -7,13 +7,9 @@ const fs = require("fs");
 require("dotenv").config();
 
 const app = express();
-const corsOptions = {
-  origin: "https://quang-nam-place-names-production.up.railway.app",
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type"],
-};
+
 app.use(cors());
-app.use(cors(corsOptions));
+
 app.use(express.json());
 
 // Phục vụ file tĩnh từ thư mục dist (frontend)
