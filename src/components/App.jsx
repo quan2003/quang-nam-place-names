@@ -113,6 +113,8 @@ function App() {
           setSelectedPhu("PHỦ THĂNG HOA");
         } else if (selectedHuyen === "Huyện Điện Bàn") {
           setSelectedPhu("PHỦ ĐIỆN BÀN");
+        } else if (selectedHuyen === "Huyện Quế Sơn") {
+          setSelectedPhu("PHỦ QUẾ SƠN"); // Thêm điều kiện cho Huyện Quế Sơn
         }
       } catch (err) {
         console.error("Lỗi khi gọi API place-headers:", err);
@@ -824,6 +826,146 @@ function App() {
                   } catch (err) {
                     console.error(
                       "Lỗi khi hiển thị hình ảnh PHỦ ĐIỆN BÀN:",
+                      err
+                    );
+                    return null;
+                  }
+                })()}
+              </div>
+              {selectedTong !== "All" && (
+                <div className="flex justify-center items-center mb-4">
+                  <span className="text-2xl font-bold text-gray-800 dark:text-gray-200 mr-4">
+                    {selectedTong.toUpperCase()}
+                  </span>
+                  {(() => {
+                    try {
+                      const chuHanNomPath = getTongChuHanNom(
+                        selectedHuyen,
+                        selectedTong
+                      );
+                      if (!chuHanNomPath)
+                        throw new Error("Không tìm thấy chữ Hán/Nôm cho Tổng");
+                      return (
+                        <img
+                          src={chuHanNomPath}
+                          alt={`Chữ Hán/Nôm - ${selectedTong}`}
+                          className="h-16 w-16 object-contain p-2 border rounded-md"
+                          onError={(e) => {
+                            console.error(
+                              `Không tải được hình ảnh ${selectedTong}`
+                            );
+                            e.target.style.display = "none";
+                          }}
+                        />
+                      );
+                    } catch (err) {
+                      console.error(
+                        `Lỗi khi hiển thị hình ảnh ${selectedTong}:`,
+                        err
+                      );
+                      return null;
+                    }
+                  })()}
+                </div>
+              )}
+            </>
+          )}
+          {selectedHuyen === "Huyện Quế Sơn" && (
+            <>
+              <div className="flex justify-center items-center mb-4">
+                <span className="text-2xl font-bold text-gray-800 dark:text-gray-200 mr-4">
+                  QUẢNG NAM
+                </span>
+                {(() => {
+                  try {
+                    const quangNamHeader = headers.find(
+                      (header) =>
+                        header.huyen === selectedHuyen &&
+                        header.level === "Tỉnh"
+                    );
+                    return (
+                      <img
+                        src={
+                          quangNamHeader?.chu_han_nom ||
+                          "/images/quang_nam_default.png"
+                        }
+                        alt="Chữ Hán/Nôm - QUẢNG NAM"
+                        className="h-16 w-16 object-contain p-2 border rounded-md"
+                        onError={(e) => {
+                          console.error("Không tải được hình ảnh QUẢNG NAM");
+                          e.target.style.display = "none";
+                        }}
+                      />
+                    );
+                  } catch (err) {
+                    console.error("Lỗi khi hiển thị hình ảnh QUẢNG NAM:", err);
+                    return null;
+                  }
+                })()}
+              </div>
+              <div className="flex justify-center items-center mb-4">
+                <span className="text-2xl font-bold text-gray-800 dark:text-gray-200 mr-4">
+                  PHỦ QUẾ SƠN
+                </span>
+                {(() => {
+                  try {
+                    const phuQueSonHeader = headers.find(
+                      (header) =>
+                        header.huyen === selectedHuyen && header.level === "Phủ"
+                    );
+                    return (
+                      <img
+                        src={
+                          phuQueSonHeader?.chu_han_nom ||
+                          "/images/phu_que_son_default.png"
+                        }
+                        alt="Chữ Hán/Nôm - PHỦ QUẾ SƠN"
+                        className="h-16 w-16 object-contain p-2 border rounded-md"
+                        onError={(e) => {
+                          console.error("Không tải được hình ảnh PHỦ QUẾ SƠN");
+                          e.target.style.display = "none";
+                        }}
+                      />
+                    );
+                  } catch (err) {
+                    console.error(
+                      "Lỗi khi hiển thị hình ảnh PHỦ QUẾ SƠN:",
+                      err
+                    );
+                    return null;
+                  }
+                })()}
+              </div>
+              <div className="flex justify-center items-center mb-4">
+                <span className="text-2xl font-bold text-gray-800 dark:text-gray-200 mr-4">
+                  HUYỆN QUẾ SƠN
+                </span>
+                {(() => {
+                  try {
+                    const huyenQueSonHeader = headers.find(
+                      (header) =>
+                        header.huyen === selectedHuyen &&
+                        header.level === "Huyện"
+                    );
+                    return (
+                      <img
+                        src={
+                          huyenQueSonHeader?.chu_han_nom ||
+                          "/images/huyen_que_son_default.png"
+                        }
+                        alt="Chữ Hán/Nôm - HUYỆN QUẾ SƠN"
+                        className="h-16 w-16 object-contain p-2 border rounded-md"
+                        onError={(e) => {
+                          console.error(
+                            "Không tải được hình ảnh HUYỆN QUẾ SƠN"
+                          );
+                          e.target.style.display = "none";
+                        }}
+                      />
+                    );
+                  } catch (err) {
+                    console.error(
+                      "Lỗi khi hiển thị hình ảnh HUYỆN QUẾ SƠN:",
                       err
                     );
                     return null;
