@@ -31,10 +31,8 @@ const GeminiChatbot = () => {
 
     setMessages(prev => [...prev, userMessage]);
     setInputMessage('');
-    setIsLoading(true);
-
-    try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    setIsLoading(true);    try {
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
       const result = await model.generateContent(inputMessage);
       const response = await result.response;
       const text = response.text();
