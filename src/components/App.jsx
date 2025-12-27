@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
+import GeminiChatbot from "./GeminiChatbot";
 
 // Sử dụng biến môi trường VITE_API_URL
 const API_URL =
@@ -1570,10 +1571,12 @@ function App() {
                   Lưu
                 </button>
               </div>
-            </div>
-          </motion.div>
+            </div>          </motion.div>
         )}
       </div>
+      
+      {/* Gemini Chatbot */}
+      <GeminiChatbot />
     </div>
   );
 }
