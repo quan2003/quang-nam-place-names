@@ -31,8 +31,7 @@ const GeminiChatbot = () => {
       }),
     };
     setMessages((prev) => [...prev, userMessage]);
-    setInputMessage("");
-    setIsLoading(true);
+    setInputMessage("");    setIsLoading(true);
     try {
       // Gọi OpenRouter API
       const response = await fetch(
@@ -85,8 +84,7 @@ const GeminiChatbot = () => {
         }),
       };
       setMessages((prev) => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
+    } finally {      setIsLoading(false);
     }
   };
 
